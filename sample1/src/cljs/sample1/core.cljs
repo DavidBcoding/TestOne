@@ -41,9 +41,7 @@
 
 
 (defn home-page []
-  [:section.section>div.container>div.content
-   (when-let [docs (:docs @session)]
-     [:div {:dangerouslySetInnerHTML {:__html (md->html docs)}}])])
+ [:p "Hello"] )
 
 (def pages
   {:home #'home-page
