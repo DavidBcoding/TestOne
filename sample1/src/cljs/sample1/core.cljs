@@ -23,7 +23,7 @@
   (r/with-let [expanded? (r/atom false)]
     [:nav.navbar.is-info>div.container
      [:div.navbar-brand
-      [:a.navbar-item {:href "/" :style {:font-weight :bold}} "sample1"]
+      [:a.navbar-item {:href "/" :style {:font-weight :bold}} "Welcome to David's Sample 1"]
       [:span.navbar-burger.burger
        {:data-target :nav-menu
         :on-click #(swap! expanded? not)
@@ -33,7 +33,8 @@
       {:class (when @expanded? :is-active)}
       [:div.navbar-start
        [nav-link "#/" "Home" :home]
-       [nav-link "#/about" "About" :about]]]]))
+       [nav-link "#/about" "About" :about]
+       [nav-link "#/youtube" "Double Fidget Spinner" :youtube]]]]))
 
 (defn about-page []
   [:section.section>div.container>div.content
@@ -41,7 +42,9 @@
 
 
 (defn home-page []
- [:p "Hello"] )
+ [:p "Hello"
+ [:p "Wow I tripped over syntax a lot here, and then poof you rolled back way too far without a save."
+ ]] )
 
 (def pages
   {:home #'home-page
