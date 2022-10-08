@@ -32,7 +32,7 @@
      [:div#nav-menu.navbar-menu
       {:class (when @expanded? :is-active)}
       [:div.navbar-start
-       [nav-link "#/" "Home" :home]
+       [nav-link "#/home" "Home" :home]
        [nav-link "#/about" "About" :about]
        [nav-link "#/youtube" "Double Fidget Spinner" :youtube]]]]))
 
@@ -40,11 +40,37 @@
   [:section.section>div.container>div.content
    [:img {:src "/img/warning_clojure.png"}]])
 
-
 (defn home-page []
- [:p "Hello"
- [:p "Wow I tripped over syntax a lot here, and then poof you rolled back way too far without a save."
- ]] )
+ (def str1 "Hello")
+ (def age 40)
+
+ [:div.content.box
+    [:p
+    [:p str1 + ", I hope everyone is having a great Monday let's get busy"
+    [:p "^^I'm really proud of that last line, because it's been a while, and I concacted that (Hello) off the top of my head
+    it's cool if you are not impressed!"
+    [:p
+    [:p "Wow I tripped over syntax a lot here, and then poof you rolled back way too far without a save. "
+    [:p
+    [:p:math (+ 400 400) ;;allows line breaks with the equation
+    [:p "  [:p:math (+ 400 400) - is that last line that got me to hard code an equation,
+     but the razzle dazzle happens in the next comment box."
+    [:p "I'm guessing nobody wants to see my code in browser, but if you knew my struggles you'd appreciate the code in the webpage lol."
+    [:p "Yes, I just typed lol at my own joke"
+ [:div1.content.box
+     [:p "Now that you know a little about me let's get some of your info"
+     [:p "Nice to meet you I'm " + age " by the way, in case you get shy when it's your turn to be forth coming."
+     [:p "Round of applause for me I declared age, and concacted that last line too."
+ [:div2.content.box
+  [:p
+  [:p "Hello written out"
+  [:p "will this break line"
+  [:p str1
+  [:p "Wow I tripped over syntax a lot here, and then poof you rolled back way too far without a save.
+  Hopefully I completed the assignment fingers crossed extra credit time"
+  [:p "-"
+  [:p:math (+ 400 400) ;;allows comments
+  ]]]]]]]]]]]]]]]]]]]]]]])
 
 (def pages
   {:home #'home-page
