@@ -34,10 +34,11 @@
       [:div.navbar-start
        [nav-link "#/" "Home" :home]
        [nav-link "#/about" "About" :about]
-       [nav-link "#/new" "New" :new]]]] )) ;; Monday morning add
-(defn new-page []
+       [nav-link "#/make" "Make Entries" :make]]]] )) ;; Monday morning add
+(defn make-page []
   [:div.content.box
-   [:p "words on new page"
+   [:p "This page will allow you to go against the Magic page, and gather your entries"
+
    ]])
 (defn about-page []
   [:section.section>div.container>div.content
@@ -62,30 +63,37 @@
  [:div.content.box
     [:p
     [:p str1 + ", I hope everyone is having a great Monday let's get busy"
-    [:p "^^I'm really proud of that last line, because it's been a while, and I concacted that (Hello) off the top of my head
-    it's cool if you are not impressed!"
+    [:p "^^I'm really proud of that last line, because it's been a while, and I concacted that (Hello) off the top of my head.
+    it's cool if you are not impressed #MommaIMadeIt"
+    [:p "Below are a few examples of addition hard coded."
     [:p
-    [:p "Wow I tripped over syntax a lot here, and then poof you rolled back way too far without a save. "
+    [:p:math (+ 50 50)
+    [:p
+    [:p:math (+ 100 100)]
+    [:p
+    [:p:math (+ 100 200)
+    [:p
+    [:p:math (+ 100 300)
     [:p
     [:p:math (+ 400 400)
-    [:p "  [:p:math (+ 400 400) - is that last line that got me to hard code an equation,
+    [:p "[:p:math (+ 400 400) - is that last line that got me to hard code an equation,
      but the razzle dazzle happens in the next comment box."
 
  [:p:div1.content.box
-   [:p "Now that you know a little about me let's get some of your info"
-   [:p "Select an option below to have your math equations read from your mind
+   [:p "Now that you know a little about me let's get some of your info:"
+   [:p "Select an option below to have your math equations either read from your mind
         or make your own entries."
    [:p [:a.button.is-primary
           [nav-link "#/about" "Mind Reader"]
    [:p [:a.button.is-primary
-          [nav-link "#/about" "Your Entries"]
+          [nav-link "#/make" "Make Entries"]
 
- ]]]]]]]]]]]]]]]])
+ ]]]]]]]]]]]]]]]]]]]]]])
 
 (def pages
   {:home #'home-page
    :about #'about-page
-   :new #'new-page})
+   :new #'make-page})
 
 (defn page []
   [(pages (:page @session))])
@@ -97,7 +105,7 @@
   (reitit/router
     [["/" :home]
      ["/about" :about]
-     ["/new" :new]]))
+     ["/make" :new]]))
 
 (defn match-route [uri]
   (->> (or (not-empty (string/replace uri #"^.*#" "")) "/")
