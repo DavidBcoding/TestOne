@@ -32,9 +32,13 @@
      [:div#nav-menu.navbar-menu
       {:class (when @expanded? :is-active)}
       [:div.navbar-start
-       [nav-link "#/home" "Home" :home]
-       [nav-link "#/about" "About" :about]]]]))
-
+       [nav-link "#/" "Home" :home]
+       [nav-link "#/about" "About" :about]
+       [nav-link "#/new" "New" :new]]]] )) ;; Monday morning add
+(defn new-page []
+  [:div.content.box
+   [:p "words on new page"
+   ]])
 (defn about-page []
   [:section.section>div.container>div.content
    [:div.content.box
@@ -80,7 +84,8 @@
 
 (def pages
   {:home #'home-page
-   :about #'about-page})
+   :about #'about-page
+   :new #'new-page})
 
 (defn page []
   [(pages (:page @session))])
@@ -91,7 +96,8 @@
 (def router
   (reitit/router
     [["/" :home]
-     ["/about" :about]]))
+     ["/about" :about]
+     ["/new" :new]]))
 
 (defn match-route [uri]
   (->> (or (not-empty (string/replace uri #"^.*#" "")) "/")
