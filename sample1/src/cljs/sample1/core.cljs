@@ -33,12 +33,23 @@
       {:class (when @expanded? :is-active)}
       [:div.navbar-start
        [nav-link "#/home" "Home" :home]
-       [nav-link "#/about" "About" :about]
-       [nav-link "#/youtube" "Double Fidget Spinner" :youtube]]]]))
+       [nav-link "#/about" "About" :about]]]]))
 
 (defn about-page []
   [:section.section>div.container>div.content
-   [:img {:src "/img/warning_clojure.png"}]])
+   [:div.content.box
+      [:p "Chris your equation is 1+ 1, and your answer is 2"
+      [:p "Austin your equation is 1+ 2, and your answer is 3"
+      [:p "Neel your equation is 1+ 3, and your answer is 4"
+      [:p "Emil your equation is 1+ 4, and your answer is 5"
+      [:p "Derek your equation is 1+ 5, and your answer is 6"
+      [:p "Daniel your equation is 1+ 6, and your answer is 7"
+      [:p "Amparo your equation is 1+ 7, and your answer is 8"
+      [:p "Mike your equation is 1+ 8, and your answer is 9"
+      [:p "Robert your equation is 1+ 9, and your answer is 10"
+      [:p "Jeff your equation is 1+ 10, and your answer is 11"
+   [:div.content.box
+   [:img {:src "/img/warning_clojure.png"}]] ]]]]]]]]]]]])
 
 (defn home-page []
  (def str1 "Hello")
@@ -52,25 +63,20 @@
     [:p
     [:p "Wow I tripped over syntax a lot here, and then poof you rolled back way too far without a save. "
     [:p
-    [:p:math (+ 400 400) ;;allows line breaks with the equation
+    [:p:math (+ 400 400)
     [:p "  [:p:math (+ 400 400) - is that last line that got me to hard code an equation,
      but the razzle dazzle happens in the next comment box."
-    [:p "I'm guessing nobody wants to see my code in browser, but if you knew my struggles you'd appreciate the code in the webpage lol."
-    [:p "Yes, I just typed lol at my own joke"
- [:div1.content.box
-     [:p "Now that you know a little about me let's get some of your info"
-     [:p "Nice to meet you I'm " + age " by the way, in case you get shy when it's your turn to be forth coming."
-     [:p "Round of applause for me I declared age, and concacted that last line too."
- [:div2.content.box
-  [:p
-  [:p "Hello written out"
-  [:p "will this break line"
-  [:p str1
-  [:p "Wow I tripped over syntax a lot here, and then poof you rolled back way too far without a save.
-  Hopefully I completed the assignment fingers crossed extra credit time"
-  [:p "-"
-  [:p:math (+ 400 400) ;;allows comments
-  ]]]]]]]]]]]]]]]]]]]]]]])
+
+ [:p:div1.content.box
+   [:p "Now that you know a little about me let's get some of your info"
+   [:p "Select an option below to have your math equations read from your mind
+        or make your own entries."
+   [:p [:a.button.is-primary
+          [nav-link "#/about" "Mind Reader"]
+   [:p [:a.button.is-primary
+          [nav-link "#/about" "Your Entries"]
+
+ ]]]]]]]]]]]]]]]])
 
 (def pages
   {:home #'home-page
