@@ -18,44 +18,32 @@
    {:href   uri
     :class (when (= page (:page @session)) "is-active")}
    title])
-;;Adding button function
-; Initial Definition of app-data
+;;Adding button function and placement
+;; Initial of app-data for 0 as place holder
 (def app-data (r/atom {:x 0 :y 0 :total 0}))
 
-; Function that updates the value of total in app-data
+;; Updates the value of total in app-data
 (defn swap [val]
       (swap! app-data assoc
              :total val)
       (js/console.log "The value from plus API is" (str (:total @app-data)))); Value comes out in console
 
-; Function that calls the math API for a specific operation and x and y values
+;; Calls the math API for a specific operation and x and y values
 (defn math [params operation]
       (POST (str "/api/math/" operation)
             {:headers {"accept" "application/transit-json"}
              :params  @params
              :handler #(swap (:total %))}))
 
-; Function that calls the math API for 1+2
+;; Function for hard coded math API for Year + 1
 (defn getAdd []
       (GET "/api/math/plus?x=1&y=2022"
            {:headers {"accept" "application/json"}
             :handler #(swap (:total %))}))
 
-; TODO - update to clojure parseInt
+;; Update to clojure parseInt
 (defn int-value [v]
       (-> v .-target .-value int))
-
-
-(comment
-
-  (:total @app-data)
-  (POST "/api/math/plus"
-        {:headers {"accept" "application/transit-json"}
-         :params  {:x 1 :y 2}
-         :handler #(swap (:total %))})
-
-  (<= 0 34 48)
-  )
 
 (defn navbar [] 
   (r/with-let [expanded? (r/atom false)]
@@ -77,27 +65,20 @@
     (def str1 "Hello")
     [:div.content.box
         [:p
-        [:p str1 + ", I hope everyone is having a great Monday let's get busy"
-        [:p "Below are a few equations hard coded."
-        [:p
-        [:p:math (+ 50 50)
-        [:p
-        [:p:math (+ 100 100)]
-        [:p
-        [:p:math (- 200 100)
+        [:p str1 + ", I hope everyone is having a great day let's get busy"
         [:p
         [:p "Click the test button to add a year to 2022."]
             [:button.button.is-primary {:on-click #(getAdd)} "2022 + 1"]
             [:p "That answer is: "
                [:span  (:total @app-data)]]
     [:div1.content.box
-        [:p "Select an option below to have your math equations either read from your mind
+        [:p "Select an option below to have your math equation either read from your mind
             or make your own entries."
         [:p [:a.button.is-primary
           [nav-link "#/about" "Mind Reader"]]
           [:p ]
         [:p [:a.button.is-primary
-          [nav-link "#/make" "Make Entries"]]]]]]]]]]]]]]]])
+          [nav-link "#/make" "Make Entries"]]]]]]]]]])
 (defn make-page []
       (let [params (r/atom {})]
    [:section.section>div.container>div.content
@@ -106,7 +87,7 @@
          [:div.form-group
           [:label "1st number: "]
           [:input {:type :text :placeholder "First number here" :on-change #(swap! params assoc :x (int-value %))}]]
-                 [:button.button.is-primary {:on-click #(math params "plus")} "+"]
+               [:button.button.is-primary {:on-click #(math params "plus")} "+"]
          [:div.form-group
           [:label "2nd number: "]
           [:input {:type :text :placeholder "Second number here" :on-change #(swap! params assoc :y (int-value %))}]]]
