@@ -18,6 +18,44 @@
    {:href   uri
     :class (when (= page (:page @session)) "is-active")}
    title])
+;;Adding button function
+; Initial Definition of app-data
+(def app-data (r/atom {:x 0 :y 0 :total 0}))
+
+; Function that updates the value of total in app-data
+(defn swap [val]
+      (swap! app-data assoc
+             :total val)
+      (js/console.log "The value from plus API is" (str (:total @app-data)))); Value comes out in console
+
+; Function that calls the math API for a specific operation and x and y values
+(defn math [params operation]
+      (POST (str "/api/math/" operation)
+            {:headers {"accept" "application/transit-json"}
+             :params  @params
+             :handler #(swap (:total %))}))
+
+; Function that calls the math API for 1+2
+(defn getAdd []
+      (GET "/api/math/plus?x=1&y=2022"
+           {:headers {"accept" "application/json"}
+            :handler #(swap (:total %))}))
+
+; TODO - update to clojure parseInt
+(defn int-value [v]
+      (-> v .-target .-value int))
+
+
+(comment
+
+  (:total @app-data)
+  (POST "/api/math/plus"
+        {:headers {"accept" "application/transit-json"}
+         :params  {:x 1 :y 2}
+         :handler #(swap (:total %))})
+
+  (<= 0 34 48)
+  )
 
 (defn navbar [] 
   (r/with-let [expanded? (r/atom false)]
@@ -33,67 +71,58 @@
       {:class (when @expanded? :is-active)}
       [:div.navbar-start
        [nav-link "#/" "Home" :home]
-       [nav-link "#/about" "About" :about]
-       [nav-link "#/make" "Make Entries" :make]]]] )) ;; Monday morning add
+       [nav-link "#/make" "Make Entries" :make]
+       [nav-link "#/about" "About" :about]]]]))
+(defn home-page []
+    (def str1 "Hello")
+    [:div.content.box
+        [:p
+        [:p str1 + ", I hope everyone is having a great Monday let's get busy"
+        [:p "Below are a few equations hard coded."
+        [:p
+        [:p:math (+ 50 50)
+        [:p
+        [:p:math (+ 100 100)]
+        [:p
+        [:p:math (- 200 100)
+        [:p
+        [:p "Click the test button to add a year to 2022."]
+            [:button.button.is-primary {:on-click #(getAdd)} "2022 + 1"]
+            [:p "That answer is: "
+               [:span  (:total @app-data)]]
+    [:div1.content.box
+        [:p "Select an option below to have your math equations either read from your mind
+            or make your own entries."
+        [:p [:a.button.is-primary
+          [nav-link "#/about" "Mind Reader"]]
+          [:p ]
+        [:p [:a.button.is-primary
+          [nav-link "#/make" "Make Entries"]]]]]]]]]]]]]]]])
 (defn make-page []
-  [:div.content.box
-   [:p "This page will allow you to go against the Magic page, and gather your entries"
-
-   ]])
+      (let [params (r/atom {})]
+   [:section.section>div.container>div.content
+       [:p "Enter numbers in the text boxes below for your own equation then click the button for your answer."]
+        [:form
+         [:div.form-group
+          [:label "1st number: "]
+          [:input {:type :text :placeholder "First number here" :on-change #(swap! params assoc :x (int-value %))}]]
+                 [:button.button.is-primary {:on-click #(math params "plus")} "+"]
+         [:div.form-group
+          [:label "2nd number: "]
+          [:input {:type :text :placeholder "Second number here" :on-change #(swap! params assoc :y (int-value %))}]]]
+        [:p "Your answer is: "
+         [:span  (:total @app-data)]]
+       ]))
 (defn about-page []
   [:section.section>div.container>div.content
    [:div.content.box
-      [:p "Chris your equation is 1+ 1, and your answer is 2"
-      [:p "Austin your equation is 1+ 2, and your answer is 3"
-      [:p "Neel your equation is 1+ 3, and your answer is 4"
-      [:p "Emil your equation is 1+ 4, and your answer is 5"
-      [:p "Derek your equation is 1+ 5, and your answer is 6"
-      [:p "Daniel your equation is 1+ 6, and your answer is 7"
-      [:p "Amparo your equation is 1+ 7, and your answer is 8"
-      [:p "Mike your equation is 1+ 8, and your answer is 9"
-      [:p "Robert your equation is 1+ 9, and your answer is 10"
-      [:p "Jeff your equation is 1+ 10, and your answer is 11"
-   [:div.content.box
-   [:img {:src "/img/warning_clojure.png"}]] ]]]]]]]]]]]])
-
-(defn home-page []
- (def str1 "Hello")
- (def age 40)
-
- [:div.content.box
-    [:p
-    [:p str1 + ", I hope everyone is having a great Monday let's get busy"
-    [:p "^^I'm really proud of that last line, because it's been a while, and I concacted that (Hello) off the top of my head.
-    it's cool if you are not impressed #MommaIMadeIt"
-    [:p "Below are a few examples of addition hard coded."
-    [:p
-    [:p:math (+ 50 50)
-    [:p
-    [:p:math (+ 100 100)]
-    [:p
-    [:p:math (+ 100 200)
-    [:p
-    [:p:math (+ 100 300)
-    [:p
-    [:p:math (+ 400 400)
-    [:p "[:p:math (+ 400 400) - is that last line that got me to hard code an equation,
-     but the razzle dazzle happens in the next comment box."
-
- [:p:div1.content.box
-   [:p "Now that you know a little about me let's get some of your info:"
-   [:p "Select an option below to have your math equations either read from your mind
-        or make your own entries."
-   [:p [:a.button.is-primary
-          [nav-link "#/about" "Mind Reader"]
-   [:p [:a.button.is-primary
-          [nav-link "#/make" "Make Entries"]
-
- ]]]]]]]]]]]]]]]]]]]]]])
-
+      [:p "Mind reader suggests your equation is 1+ 1, and your answer is 2"
+      [:p
+      [:img {:src "/img/warning_clojure.png"}]]]]])
 (def pages
   {:home #'home-page
-   :about #'about-page
-   :new #'make-page})
+   :make #'make-page
+   :about #'about-page})
 
 (defn page []
   [(pages (:page @session))])
@@ -105,7 +134,7 @@
   (reitit/router
     [["/" :home]
      ["/about" :about]
-     ["/make" :new]]))
+     ["/make" :make]]))
 
 (defn match-route [uri]
   (->> (or (not-empty (string/replace uri #"^.*#" "")) "/")
