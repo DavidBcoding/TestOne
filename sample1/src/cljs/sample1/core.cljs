@@ -88,6 +88,9 @@
           [:label "1st number: "]
           [:input {:type :text :placeholder "First number here" :on-change #(swap! params assoc :x (int-value %))}]]
                [:button.button.is-primary {:on-click #(math params "plus")} "+"]
+               [:button.button.is-black {:on-click #(math params "minus")} "-"]
+               [:button.button.is-primary {:on-click #(math params "multiply")} "x"]
+               [:button.button.is-black {:on-click #(math params "divide")} "/"]
          [:div.form-group
           [:label "2nd number: "]
           [:input {:type :text :placeholder "Second number here" :on-change #(swap! params assoc :y (int-value %))}]]]
