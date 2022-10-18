@@ -25,8 +25,8 @@
 ;; Updates the value of total in app-data
 (defn swap [val]
       (swap! app-data assoc
-             :total val)
-      (js/console.log "The value from plus API is" (str (:total @app-data)))); Value comes out in console
+             :total val))
+      ;(js/console.log "The value from minus API is" (str (:total @app-data)))); Value comes out in console
 
 ;; Calls the math API for a specific operation and x and y values
 (defn math [params operation]
@@ -41,7 +41,7 @@
            {:headers {"accept" "application/json"}
             :handler #(swap (:total %))}))
 
-;; Update to clojure parseInt
+;; User entries
 (defn int-value [v]
       (-> v .-target .-value int))
 
