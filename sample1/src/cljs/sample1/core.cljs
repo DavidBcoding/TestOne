@@ -26,7 +26,7 @@
 (defn swap [val]
       (swap! app-data assoc
              :total val))
-      ;(js/console.log "The value from minus API is" (str (:total @app-data)))); Value comes out in console
+
 
 ;; Calls the math API for a specific operation and x and y values
 (defn math [params operation]
@@ -79,10 +79,11 @@
           [:p ]
         [:p [:a.button.is-primary
           [nav-link "#/make" "Make Entries"]]]]]]]]]])
+
 (defn make-page []
       (let [params (r/atom {})]
    [:section.section>div.container>div.content
-       [:p "Enter numbers in the text boxes below for your own equation then click the button for your answer."]
+       [:p "Enter numbers in the text boxes below for your own equation then click an operation for your answer."]
         [:form
          [:div.form-group
           [:label "1st number: "]
@@ -94,18 +95,44 @@
          [:div.form-group
           [:label "2nd number: "]
           [:input {:type :text :placeholder "Second number here" :on-change #(swap! params assoc :y (int-value %))}]]]
-        [:p "Your answer is: "
-         [:span  (:total @app-data)]]
-       ]))
+        [:div.form-group
+          [:label "Your answer is: "]
+          [:p]
+          [:button.button.is-primary [:span (:total @app-data )]]]
+          ;
+          [:p [:a.button.is-primary
+          [nav-link "#/again" "New Equation"]]]]))
+(defn again-page []
+      (let [params (r/atom {})]
+   [:section.section>div.container>div.content
+       [:p "Enter numbers in the text boxes below for your own equation then click an operation for your answer."]
+        [:form
+         [:div.form-group
+          [:label "1st number: "]
+          [:input {:type :text :placeholder "First number here" :on-change #(swap! params assoc :x (int-value %))}]]
+               [:button.button.is-primary {:on-click #(math params "plus")} "+"]
+               [:button.button.is-black {:on-click #(math params "minus")} "-"]
+               [:button.button.is-primary {:on-click #(math params "multiply")} "x"]
+               [:button.button.is-black {:on-click #(math params "divide")} "/"]
+         [:div.form-group
+          [:label "2nd number: "]
+          [:input {:type :text :placeholder "Second number here" :on-change #(swap! params assoc :y (int-value %))}]]]
+        [:div.form-group
+          [:label "Your answer is: "]
+          [:p]
+          [:button.button.is-primary [:span (:total @app-data )]]]
+          [:p [:a.button.is-primary
+          [nav-link "#/make" "New Equation"]]]]))
 (defn about-page []
   [:section.section>div.container>div.content
    [:div.content.box
-      [:p "Mind reader suggests your equation is 1+ 1, and your answer is 2"
+      [:p "Mind reader suggests your equation is 1+ 1, and your answer is: 2" ]
       [:p
-      [:img {:src "/img/warning_clojure.png"}]]]]])
+      [:img {:src "/img/warning_clojure.png"}]]]])
 (def pages
   {:home #'home-page
    :make #'make-page
+   :again #'again-page
    :about #'about-page})
 
 (defn page []
@@ -117,8 +144,9 @@
 (def router
   (reitit/router
     [["/" :home]
-     ["/about" :about]
-     ["/make" :make]]))
+     ["/make" :make]
+     ["/again" :again]
+     ["/about" :about]]))
 
 (defn match-route [uri]
   (->> (or (not-empty (string/replace uri #"^.*#" "")) "/")
