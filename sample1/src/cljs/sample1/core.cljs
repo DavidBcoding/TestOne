@@ -94,18 +94,23 @@
        [:p "Enter numbers in the text boxes below for your own equation then click an operation for your answer."]
         [:form
          [:div.form-group
-          [:label "1st number: "]
+          ;[:label "1st number: "]
           [:input {:type :text :placeholder "First number here" :on-change #(swap! params assoc :x (int-value %))}]]
            [:p ]
-               [:button.button.is-primary {:on-click #(math params "plus")} "+"]
-               [:button.button.is-black {:on-click #(math params "minus")} "-"]
-               [:button.button.is-primary {:on-click #(math params "multiply")} "x"]
-               [:button.button.is-black {:on-click #(math params "divide")} "/"]
+               ;[:button.button.is-primary {:on-click #(math params "plus")} "+"]
+               ;[:button.button.is-black {:on-click #(math params "minus")} "-"]
+               ;[:button.button.is-primary {:on-click #(math params "multiply")} "x"]
+               ;[:button.button.is-black {:on-click #(math params "divide")} "/"]
            [:p ]
          [:div.form-group
-          [:label "2nd number: "]
+          ;[:label "2nd number: "]
           [:input {:type :text :placeholder "Second number here" :on-change #(swap! params assoc :y (int-value %))}]]]
-           [:p ]
+               [:p ]
+                [:button.button.is-primary {:on-click #(math params "plus")} "+"]
+                [:button.button.is-black {:on-click #(math params "minus")} "-"]
+                [:button.button.is-primary {:on-click #(math params "multiply")} "x"]
+                [:button.button.is-black {:on-click #(math params "divide")} "/"]
+               [:p ]
         [:div.form-group
           [:label "Your answer is: " + [:span (change-color) (:total @app-data )]]]
           [:p]
@@ -118,22 +123,19 @@
        [:p "Enter numbers in the text boxes below for your own equation then click an operation for your answer."]
         [:form
          [:div.form-group
-          [:label "1st number: "]
           [:input {:type :text :placeholder "First number here" :on-change #(swap! params assoc :x (int-value %))}]]
-           [:p ]
-               [:button.button.is-primary {:on-click #(math params "plus")} "+"]
-               [:button.button.is-black {:on-click #(math params "minus")} "-"]
-               [:button.button.is-primary {:on-click #(math params "multiply")} "x"]
-               [:button.button.is-black {:on-click #(math params "divide")} "/"]
-           [:p ]
+            [:p ]
          [:div.form-group
-          [:label "2nd number: "]
           [:input {:type :text :placeholder "Second number here" :on-change #(swap! params assoc :y (int-value %))}]]]
-           [:p ]
-        [:div.form-group
-          [:label "Your answer is: " + [:span (change-color) (:total @app-data )]]]
+               [:p ]
+                [:button.button.is-primary {:on-click #(math params "plus")} "+"]
+                [:button.button.is-black {:on-click #(math params "minus")} "-"]
+                [:button.button.is-primary {:on-click #(math params "multiply")} "x"]
+                [:button.button.is-black {:on-click #(math params "divide")} "/"]
+               [:p ]
+        [:div.form-group]
+          [:label "Your answer is: " + [:span (change-color) (:total @app-data )]]
           [:p]
-        ; [:button.button.is-white [:span (change-color) (:total @app-data )]]
           [:p [:a.button.is-warning
           [nav-link "#/make" "New Equation"]]]]))
 (defn about-page []
