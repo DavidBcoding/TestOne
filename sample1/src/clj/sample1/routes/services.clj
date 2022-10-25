@@ -65,7 +65,48 @@
              :responses {200 {:body {:total pos-int?}}}
              :handler (fn [{{{:keys [x y]} :body} :parameters}]
                         {:status 200
-                         :body {:total (+ x y)}})}}]]
+                         :body {:total (+ x y)}})}}]
+   ["/minus"
+    {:get {:summary "plus with spec query parameters"
+           :parameters {:query {:x int?, :y int?}}
+           :responses {200 {:body {:total pos-int?}}}
+           :handler (fn [{{{:keys [x y]} :query} :parameters}]
+                        {:status 200
+                         :body {:total (- x y)}})}
+     :post {:summary "plus with spec body parameters"
+            :parameters {:body {:x int?, :y int?}}
+            :responses {200 {:body {:total pos-int?}}}
+            :handler (fn [{{{:keys [x y]} :body} :parameters}]
+                         {:status 200
+                          :body {:total (- x y)}})}}]
+      ["/multiply"
+       {:get {:summary "plus with spec query parameters"
+              :parameters {:query {:x int?, :y int?}}
+              :responses {200 {:body {:total pos-int?}}}
+              :handler (fn [{{{:keys [x y]} :query} :parameters}]
+                           {:status 200
+                            :body {:total (* x y)}})}
+        :post {:summary "plus with spec body parameters"
+               :parameters {:body {:x int?, :y int?}}
+               :responses {200 {:body {:total pos-int?}}}
+               :handler (fn [{{{:keys [x y]} :body} :parameters}]
+                            {:status 200
+                             :body {:total (* x y)}})}}]
+      ["/divide"
+       {:get {:summary "plus with spec query parameters"
+              :parameters {:query {:x int?, :y int?}}
+              :responses {200 {:body {:total pos-int?}}}
+              :handler (fn [{{{:keys [x y]} :query} :parameters}]
+                           {:status 200
+                            :body {:total (/ x y)}})}
+        :post {:summary "plus with spec body parameters"
+               :parameters {:body {:x int?, :y int?}}
+               :responses {200 {:body {:total pos?}}}
+               :handler (fn [{{{:keys [x y]} :body} :parameters}]
+                            {:status 200
+                             :body {:total (float (/ x y))}})}}]]
+
+
 
    ["/files"
     {:swagger {:tags ["files"]}}

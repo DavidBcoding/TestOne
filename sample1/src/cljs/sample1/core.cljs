@@ -29,10 +29,10 @@
 
 
 ;; Calls the math API for a specific operation and x and y values
-(defn math [params operation]
+(defn math [operation]
       (POST (str "/api/math/" operation)
             {:headers {"accept" "application/transit-json"}
-             :params  @params
+             :params  @app-data
              :handler #(swap (:total %))}))
 
 ;; Function for hard coded math API for Year + 1
@@ -90,54 +90,32 @@
 
 (defn make-page []
       (let [params (r/atom {})]
-   [:section.section>div.container>div.content
-       [:p "Enter numbers in the text boxes below for your own equation then click an operation for your answer."]
-        [:form
-         [:div.form-group
-          ;[:label "1st number: "]
-          [:input {:type :text :placeholder "First number here" :on-change #(swap! params assoc :x (int-value %))}]]
-           [:p ]
-               ;[:button.button.is-primary {:on-click #(math params "plus")} "+"]
-               ;[:button.button.is-black {:on-click #(math params "minus")} "-"]
-               ;[:button.button.is-primary {:on-click #(math params "multiply")} "x"]
-               ;[:button.button.is-black {:on-click #(math params "divide")} "/"]
-           [:p ]
-         [:div.form-group
-          ;[:label "2nd number: "]
-          [:input {:type :text :placeholder "Second number here" :on-change #(swap! params assoc :y (int-value %))}]]]
-               [:p ]
-                [:button.button.is-primary {:on-click #(math params "plus")} "+"]
-                [:button.button.is-black {:on-click #(math params "minus")} "-"]
-                [:button.button.is-primary {:on-click #(math params "multiply")} "x"]
-                [:button.button.is-black {:on-click #(math params "divide")} "/"]
-               [:p ]
-        [:div.form-group
-          [:label "Your answer is: " + [:span (change-color) (:total @app-data )]]]
-          [:p]
-        ; [:button.button.is-white [:span (change-color) (:total @app-data )]]
-          [:p [:a.button.is-warning
-          [nav-link "#/again" "New Equation"]]]]))
-(defn again-page []
-      (let [params (r/atom {})]
-   [:section.section>div.container>div.content
-       [:p "Enter numbers in the text boxes below for your own equation then click an operation for your answer."]
-        [:form
-         [:div.form-group
-          [:input {:type :text :placeholder "First number here" :on-change #(swap! params assoc :x (int-value %))}]]
-            [:p ]
-         [:div.form-group
-          [:input {:type :text :placeholder "Second number here" :on-change #(swap! params assoc :y (int-value %))}]]]
-               [:p ]
-                [:button.button.is-primary {:on-click #(math params "plus")} "+"]
-                [:button.button.is-black {:on-click #(math params "minus")} "-"]
-                [:button.button.is-primary {:on-click #(math params "multiply")} "x"]
-                [:button.button.is-black {:on-click #(math params "divide")} "/"]
-               [:p ]
-        [:div.form-group]
-          [:label "Your answer is: " + [:span (change-color) (:total @app-data )]]
-          [:p]
-          [:p [:a.button.is-warning
-          [nav-link "#/make" "New Equation"]]]]))
+           [:section.section>div.container>div.content
+            [:p "Enter numbers in the text boxes below for your own equation then click an operation for your answer."]
+            [:form
+             [:div.form-group
+              ;[:label "1st number: "]
+              [:input {:type :text :placeholder "First number here" :on-change #(swap! app-data assoc :x (int-value %))}]]
+             [:p]
+             ;[:button.button.is-primary {:on-click #(math params "plus")} "+"]
+             ;[:button.button.is-black {:on-click #(math params "minus")} "-"]
+             ;[:button.button.is-primary {:on-click #(math params "multiply")} "x"]
+             ;[:button.button.is-black {:on-click #(math params "divide")} "/"]
+             [:p]
+             [:div.form-group
+              ;[:label "2nd number: "]
+              [:input {:type :text :placeholder "Second number here" :on-change #(swap! app-data assoc :y (int-value %))}]]]
+            [:p]
+            [:button.button.is-primary {:on-click #(math "plus")} "+"]
+            [:button.button.is-black {:on-click #(math "minus")} "-"]
+            [:button.button.is-primary {:on-click #(math "multiply")} "x"]
+            [:button.button.is-black {:on-click #(math "divide")} "/"]
+            [:p]
+            [:div.form-group
+             [:label "Your answer is: " + [:span (change-color) (:total @app-data)]]]
+            [:p]
+            ; [:button.button.is-white [:span (change-color) (:total @app-data )
+            ]))
 (defn about-page []
   [:section.section>div.container>div.content
    [:div.content.box
@@ -147,7 +125,6 @@
 (def pages
   {:home #'home-page
    :make #'make-page
-   :again #'again-page
    :about #'about-page})
 
 (defn page []
