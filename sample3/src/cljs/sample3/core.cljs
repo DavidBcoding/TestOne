@@ -13,12 +13,47 @@
     [reitit.frontend.easy :as rfe]
     [clojure.string :as string])
   (:import goog.History))
-
 (defn nav-link [uri title page]
-  [:a.navbar-item
-   {:href   uri
-    :class (when (= page @(rf/subscribe [:common/page-id])) :is-active)}
-   title])
+      [:a.navbar-item
+       {:href   uri
+        :class (when (= page @(rf/subscribe [:common/page-id])) :is-active)}
+       title])
+
+;######Changes by David
+;;Adding button function and placement
+;; Initial of app-data for 0 as place holder
+(def app-data (r/atom {:x 0 :y 0 :total 0}))
+
+;; Updates the value of total in app-data
+(defn swap [val]
+      (swap! app-data assoc
+             :total val))
+
+
+;; Calls the math API for a specific operation and x and y values
+(defn math [operation]
+      (POST (str "/api/math/" operation)
+            {:headers {"accept" "application/transit-json"}
+             :params  @app-data
+             :handler #(swap (:total %))}))
+
+;; Function for hard coded math API for Year + 1
+(defn getAdd []
+      (GET "/api/math/plus?x=1&y=2022"
+           {:headers {"accept" "application/json"}
+            :handler #(swap (:total %))}))
+
+;; User entries
+(defn int-value [v]
+      (-> v .-target .-value int))
+
+;###########
+(defn change-color []
+      (cond
+        (<= 0 (:total @app-data) 19) {:style {:color "lightgreen" :font-weight :bold}}
+        (<= 20 (:total @app-data) 49) {:style {:color "lightblue" :font-weight :bold}}
+        :default {:style {:color "lightsalmon" :font-weight :bold}}))
+;###########
 
 (defn navbar [] 
   (r/with-let [expanded? (r/atom false)]
@@ -41,10 +76,30 @@
    [:img {:src "/img/warning_clojure.png"}]])
 
 (defn home-page []
-  [:section.section>div.container>div.content
-   (when-let [docs @(rf/subscribe [:docs])]
-     [:div {:dangerouslySetInnerHTML {:__html (md->html docs)}}])])
-
+      (def str1 "Hello")
+      (let [params (r/atom {})]
+      [:div.content.box
+        [:p str1 + ", I hope everyone is having a great day!"]
+          [:p "Click the test button to add a year to 2022."]
+          [:button.button.is-primary {:on-click #(getAdd)} "2022 + 1"]
+          [:p "That answer is: "
+           [:span  (:total @app-data)]]
+                   [:section.section>div.container>div.content
+                    [:p "Enter numbers in the text boxes below for your own equation then click an operation for your answer."]
+                      [:form
+                        [:div.form-group
+                          [:input {:type :text :placeholder "First number here" :on-change #(swap! app-data assoc :x (int-value %))}]]
+                    [:p]
+                     [:div.form-group
+                      [:input {:type :text :placeholder "Second number here" :on-change #(swap! app-data assoc :y (int-value %))}]]]
+                        [:p]
+                          [:button.button.is-primary {:on-click #(math "plus")} "+"]
+                          [:button.button.is-black {:on-click #(math "minus")} "-"]
+                          [:button.button.is-primary {:on-click #(math "multiply")} "x"]
+                          [:button.button.is-black {:on-click #(math "divide")} "/"]
+                        [:p]
+                          [:div.form-group
+                           [:label "Your answer is: " + [:span (change-color) (:total @app-data)]]]]]))
 (defn page []
   (if-let [page @(rf/subscribe [:common/page])]
     [:div
