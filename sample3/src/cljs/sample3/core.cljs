@@ -10,6 +10,7 @@
     [sample3.ajax :as ajax]
     [sample3.events]
     [reitit.core :as reitit]
+
     [reitit.frontend.easy :as rfe]
     [clojure.string :as string])
   (:import goog.History))
@@ -32,14 +33,14 @@
 
 ;; Calls the math API for a specific operation and x and y values
 (defn math [operation]
-      (POST (str "/api/math/" operation)
+      (ajax.core/POST (str "/api/math/" operation)
             {:headers {"accept" "application/transit-json"}
              :params  @app-data
              :handler #(swap (:total %))}))
 
 ;; Function for hard coded math API for Year + 1
 (defn getAdd []
-      (GET "/api/math/plus?x=1&y=2022"
+      (ajax.core/GET "/api/math/plus?x=1&y=2022"
            {:headers {"accept" "application/json"}
             :handler #(swap (:total %))}))
 
@@ -75,9 +76,40 @@
   [:section.section>div.container>div.content
    [:img {:src "/img/warning_clojure.png"}]])
 
+
+
+
+(rf/reg-sub
+  :x
+  (fn [db _]
+      (:x db)))
+
+(rf/reg-event-db
+  :x
+  (fn [db [_ new-value]]
+      (assoc db :x new-value)))
+
+
+
+(comment
+  (rf/dispatch [:x 8])
+  (rf/dispatch [:x 100])
+  (rf/dispatch [:x 8])
+
+
+  @re-frame.db/app-db
+
+  @(rf/subscribe [:x])
+
+  ())
+
+
+
+
 (defn home-page []
       (def str1 "Hello")
-      (let [params (r/atom {})]
+      (let [x (rf/subscribe  [ :x])
+            y (rf/subscribe [:y])]
       [:div.content.box
         [:p str1 + ", I hope everyone is having a great day!"]
           [:p "Click the test button to add a year to 2022."]
@@ -88,7 +120,7 @@
                     [:p "Enter numbers in the text boxes below for your own equation then click an operation for your answer."]
                       [:form
                         [:div.form-group
-                          [:input {:type :text :placeholder "First number here" :on-change #(swap! app-data assoc :x (int-value %))}]]
+                          [:input {:type :text :value (str @x) :placeholder "First number here" :on-change #(rf/dispatch  [:x (int-value %)])}]]
                     [:p]
                      [:div.form-group
                       [:input {:type :text :placeholder "Second number here" :on-change #(swap! app-data assoc :y (int-value %))}]]]
