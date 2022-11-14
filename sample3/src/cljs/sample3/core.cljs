@@ -10,19 +10,18 @@
     [sample3.ajax :as ajax]
     [sample3.events]
     [reitit.core :as reitit]
-
     [reitit.frontend.easy :as rfe]
-    [clojure.string :as string])
+    [clojure.string :as string]
+    [ajax.core :refer [GET POST]])
   (:import goog.History))
+
 (defn nav-link [uri title page]
       [:a.navbar-item
        {:href   uri
         :class (when (= page @(rf/subscribe [:common/page-id])) :is-active)}
        title])
 
-;######Changes by David
 ;;Adding button function and placement
-;; Initial of app-data for 0 as place holder
 (def app-data (r/atom {:x 0 :y 0 :total 0}))
 
 ;; Updates the value of total in app-data
@@ -44,17 +43,15 @@
            {:headers {"accept" "application/json"}
             :handler #(swap (:total %))}))
 
-;; User entries
 (defn int-value [v]
       (-> v .-target .-value int))
 
-;###########
 (defn change-color []
       (cond
         (<= 0 (:total @app-data) 19) {:style {:color "lightgreen" :font-weight :bold}}
         (<= 20 (:total @app-data) 49) {:style {:color "lightblue" :font-weight :bold}}
         :default {:style {:color "lightsalmon" :font-weight :bold}}))
-;###########
+
 
 (defn navbar [] 
   (r/with-let [expanded? (r/atom false)]
@@ -103,7 +100,29 @@
 
   ())
 
+(rf/reg-sub
+  :y
+  (fn [db _]
+      (:y db)))
 
+(rf/reg-event-db
+  :y
+  (fn [db [_ new-value]]
+      (assoc db :y new-value)))
+
+
+
+(comment
+  (rf/dispatch [:y 81])
+  (rf/dispatch [:y 1001])
+  (rf/dispatch [:y 81])
+
+
+  @re-frame.db/app-db
+
+  @(rf/subscribe [:y])
+
+  ())
 
 
 (defn home-page []
@@ -118,20 +137,20 @@
            [:span  (:total @app-data)]]
                    [:section.section>div.container>div.content
                     [:p "Enter numbers in the text boxes below for your own equation then click an operation for your answer."]
-                      [:form
-                        [:div.form-group
-                          [:input {:type :text :value (str @x) :placeholder "First number here" :on-change #(rf/dispatch  [:x (int-value %)])}]]
+                    [:form
+                      [:div.form-group
+                        [:input {:type :text :value (str @x) :placeholder "First number here" :on-change #(rf/dispatch [:x (int-value %)])}]]
                     [:p]
                      [:div.form-group
-                      [:input {:type :text :placeholder "Second number here" :on-change #(swap! app-data assoc :y (int-value %))}]]]
-                        [:p]
+                        [:input {:type :text :value (str @y) :placeholder "Second number here" :on-change #(rf/dispatch [:y (int-value %)])}]]
+                         [:p]
                           [:button.button.is-primary {:on-click #(math "plus")} "+"]
                           [:button.button.is-black {:on-click #(math "minus")} "-"]
                           [:button.button.is-primary {:on-click #(math "multiply")} "x"]
                           [:button.button.is-black {:on-click #(math "divide")} "/"]
-                        [:p]
+                         [:p]
                           [:div.form-group
-                           [:label "Your answer is: " + [:span (change-color) (:total @app-data)]]]]]))
+                           [:label "Your answer is: " + [:span (change-color) (:total @app-data)]]]]]]))
 (defn page []
   (if-let [page @(rf/subscribe [:common/page])]
     [:div
