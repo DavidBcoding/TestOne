@@ -1,4 +1,4 @@
-(ns sample1.core
+(ns sample1.core                                                                                
   (:require
     [reagent.core :as r]
     [reagent.dom :as rdom]
@@ -121,7 +121,7 @@
    [:div.content.box
       [:p "Mind reader suggests your equation is 1+ 1, and your answer is: 2" ]
       [:p
-      [:img {:src "/img/warning_clojure.png"}]]]])
+       [:img {:src "/img/warning_clojure.png"}]]]])
 (def pages
   {:home #'home-page
    :make #'make-page
